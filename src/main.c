@@ -6,10 +6,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <pwd.h>
 
 void split(char *str, char *dest[]); 
-void displayHandle(char *username) {
-  printf("\033[33;1m%s ~> \033[0m", username);
+void displayHandle() {
+  uid_t uid = getuid();
+  struct passwd *pw = getpwuid(uid);
+
+  printf("\033[33;1m%s ~> \033[0m", pw->pw_name);
 }
 
 int main() {
@@ -32,7 +36,7 @@ int main() {
   enableRawMode();
   while (true) {
     if (dHandle == true) {
-      displayHandle("PPxel");
+      displayHandle();
       fflush(stdout);
       dHandle = false;
     }
